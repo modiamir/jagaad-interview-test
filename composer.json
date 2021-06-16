@@ -1,0 +1,12 @@
+{
+    "name": "modiamir/jagaad-interview-test",
+    "description": "Interview test project for jagaad PHP developer position",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Amir Modarresi",
+            "email": "amir.modarresi.13@gmail.com"
+        }
+    ],
+    "require": {}
+}

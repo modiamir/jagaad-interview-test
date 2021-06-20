@@ -2,11 +2,14 @@
 
 namespace App\WeatherLogger;
 
+use App\Model\City;
+use App\Model\Forecast;
+
 interface WeatherLoggerInterface
 {
     /**
-     * @param string $cityName
-     * @param array<string> $forecasts
+     * @param City $city
+     * @param array<Forecast> $forecasts
      */
-    public function log(string $cityName, array $forecasts): void;
+    public function log(City $city, array $forecasts): void;
 }

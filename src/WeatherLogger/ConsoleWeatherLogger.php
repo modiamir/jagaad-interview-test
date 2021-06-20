@@ -2,6 +2,8 @@
 
 namespace App\WeatherLogger;
 
+use App\Model\City;
+use App\Model\Forecast;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ConsoleWeatherLogger implements WeatherLoggerInterface
@@ -13,13 +15,19 @@ class ConsoleWeatherLogger implements WeatherLoggerInterface
         $this->output = $output;
     }
 
-    public function log(string $cityName, array $forecasts): void
+    /**
+     * @param City $city
+     * @param array<Forecast> $forecasts
+     */
+    public function log(City $city, array $forecasts): void
     {
         $this->output->writeln(
             sprintf(
                 'Processed city %s | %s',
-                $cityName,
-                implode(' - ', $forecasts)
+                $city->getName(),
+                implode(' - ', array_map(function (Forecast $forecast) {
+                    return $forecast->getStatus();
+                }, $forecasts))
             )
         );
     }

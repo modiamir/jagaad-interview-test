@@ -3,6 +3,7 @@
 namespace Tests\Unit\WeatherLogger;
 
 use Mockery;
+use Tests\DataFactory;
 use Tests\TestCase;
 use App\WeatherLogger\WeatherLoggerInterface;
 use App\WeatherLogger\ConsoleWeatherLogger;
@@ -11,22 +12,24 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ConsoleWeatherLoggerTest extends TestCase
 {
+    use DataFactory;
+
     public function test_it_calls_given_output_writeln_method()
     {
         // Arrange
-        $locationName = $this->faker->city;
-        $forecasts = [$this->faker->word, $this->faker->city];
+        $city = $this->provideCity();
+        $forecasts = $this->provideForecasts(2);
         $output = $this->initializeOutput();
         $sut = $this->initializeLogger($output);
         $expectedLoggedEntry = sprintf(
             "Processed city %s | %s - %s",
-            $locationName,
-            $forecasts[0],
-            $forecasts[1]
+            $city->getName(),
+            $forecasts[0]->getStatus(),
+            $forecasts[1]->getStatus()
         );
 
         // Act
-        $sut->log($locationName, $forecasts);
+        $sut->log($city, $forecasts);
 
         // Assert
         $output

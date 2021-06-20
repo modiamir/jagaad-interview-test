@@ -5,7 +5,6 @@ namespace Tests\Unit\Command;
 use App\Command\FetchWeatherCommand;
 use App\WeatherLogger\ConsoleWeatherLogger;
 use Hamcrest\Core\IsInstanceOf;
-use Mockery;
 use Mockery\MockInterface;
 use App\Action\FetchWeatherActionInterface;
 use Symfony\Component\Console\Command\Command;
@@ -19,9 +18,10 @@ class FetchWeatherCommandTest extends TestCase
     /**
      * @test
      */
-    public function it_calls_give_action()
+    public function it_calls_give_action(): void
     {
         // Arrange
+        /** @var FetchWeatherActionInterface $fetchWeatherAction */
         $fetchWeatherAction = $this->initializeFetchWeatherAction();
         $sut = $this->initializeCommand($fetchWeatherAction);
         $input = new StringInput('');
@@ -31,6 +31,7 @@ class FetchWeatherCommandTest extends TestCase
         $result = $sut->execute($input, $output);
 
         // Assert
+        /** @var MockInterface $fetchWeatherAction */
         $fetchWeatherAction
             ->shouldHaveBeenCalled()
             ->once()
@@ -41,12 +42,9 @@ class FetchWeatherCommandTest extends TestCase
 
     private function initializeFetchWeatherAction(): MockInterface
     {
-        return Mockery::spy(FetchWeatherActionInterface::class);
+        return $this->spy(FetchWeatherActionInterface::class);
     }
 
-    /**
-     * @param FetchWeatherActionInterface|MockInterface $fetchWeatherAction
-     */
     private function initializeCommand(FetchWeatherActionInterface $fetchWeatherAction): FetchWeatherCommand
     {
         return new FetchWeatherCommand($fetchWeatherAction);

@@ -7,11 +7,17 @@ use Faker\Generator;
 
 trait HasFaker
 {
-    protected ?Generator $faker = null;
+    private ?Generator $faker = null;
 
-    protected function setUpFaker()
+    protected function faker(): Generator
     {
+        if ($this->faker) {
+            return $this->faker;
+        }
+
         $this->faker = $this->makeFaker();
+
+        return $this->faker;
     }
 
     protected function makeFaker(): Generator

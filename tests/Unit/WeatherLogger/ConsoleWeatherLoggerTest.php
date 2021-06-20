@@ -2,10 +2,8 @@
 
 namespace Tests\Unit\WeatherLogger;
 
-use Mockery;
 use Tests\DataFactory;
 use Tests\TestCase;
-use App\WeatherLogger\WeatherLoggerInterface;
 use App\WeatherLogger\ConsoleWeatherLogger;
 use Mockery\MockInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -14,11 +12,12 @@ class ConsoleWeatherLoggerTest extends TestCase
 {
     use DataFactory;
 
-    public function test_it_calls_given_output_writeln_method()
+    public function test_it_calls_given_output_writeln_method() :void
     {
         // Arrange
         $city = $this->provideCity();
         $forecasts = $this->provideForecasts(2);
+        /** @var OutputInterface $output */
         $output = $this->initializeOutput();
         $sut = $this->initializeLogger($output);
         $expectedLoggedEntry = sprintf(
@@ -32,6 +31,7 @@ class ConsoleWeatherLoggerTest extends TestCase
         $sut->log($city, $forecasts);
 
         // Assert
+        /** @var MockInterface $output */
         $output
             ->shouldHaveReceived('writeln')
             ->once()
@@ -39,15 +39,12 @@ class ConsoleWeatherLoggerTest extends TestCase
         ;
     }
 
-    /**
-     * @return MockInterface|OutputInterface
-     */
     private function initializeOutput(): MockInterface
     {
-        return Mockery::spy(OutputInterface::class);
+        return $this->spy(OutputInterface::class);
     }
 
-    public function initializeLogger(OutputInterface $output): WeatherLoggerInterface
+    public function initializeLogger(OutputInterface $output): ConsoleWeatherLogger
     {
         return new ConsoleWeatherLogger($output);
     }

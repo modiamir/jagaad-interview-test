@@ -11,12 +11,12 @@ trait DataFactory
 
     private function provideCity(): City
     {
-        return (new City())->setId($this->faker->randomNumber())->setName($this->faker->city);
+        return (new City())->setId($this->faker()->randomNumber())->setName($this->faker()->city);
     }
 
     private function provideForecast(): Forecast
     {
-        return (new Forecast())->setId($this->faker->randomNumber())->setStatus($this->faker->word);
+        return (new Forecast())->setId($this->faker()->randomNumber())->setStatus($this->faker()->word);
     }
 
     /**
@@ -51,14 +51,17 @@ trait DataFactory
      * @param array<City> $cities
      * @param int $countPerCity
      *
-     * @return array<Forecast>
+     * @return array<int,array<Forecast>>
      */
     private function provideForecastsForCities(array $cities, int $countPerCity = 1): array
     {
         $forecasts = [];
 
         foreach ($cities as $city) {
-            $forecasts[$city->getId()] = $this->provideForecasts($countPerCity);
+            if (!$city->getId()) {
+                continue;
+            }
+            $forecasts[(int)$city->getId()] = $this->provideForecasts($countPerCity);
         }
 
         return $forecasts;

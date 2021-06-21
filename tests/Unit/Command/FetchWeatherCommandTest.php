@@ -12,7 +12,6 @@ use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\NullOutput;
 use Tests\TestCase;
 
-
 class FetchWeatherCommandTest extends TestCase
 {
     /**

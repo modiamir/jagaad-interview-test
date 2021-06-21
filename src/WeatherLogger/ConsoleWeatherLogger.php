@@ -4,6 +4,7 @@ namespace App\WeatherLogger;
 
 use App\Model\City;
 use App\Model\Forecast;
+use App\Model\ForecastDay;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ConsoleWeatherLogger implements WeatherLoggerInterface
@@ -17,17 +18,17 @@ class ConsoleWeatherLogger implements WeatherLoggerInterface
 
     /**
      * @param City $city
-     * @param array<Forecast> $forecasts
+     * @param Forecast $forecast
      */
-    public function log(City $city, array $forecasts): void
+    public function log(City $city, Forecast $forecast): void
     {
         $this->output->writeln(
             sprintf(
                 'Processed city %s | %s',
                 $city->getName(),
-                implode(' - ', array_map(function (Forecast $forecast) {
-                    return $forecast->getStatus();
-                }, $forecasts))
+                implode(' - ', array_map(function (ForecastDay $forecast) {
+                    return $forecast->getDay()->getCondition()->getText();
+                }, $forecast->getForecastday()))
             )
         );
     }

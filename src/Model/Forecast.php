@@ -4,30 +4,27 @@ namespace App\Model;
 
 class Forecast
 {
-    private ?int $id = null;
+    /**
+     * @var array<ForecastDay>
+     */
+    private array $forecastday = [];
 
-    private ?string $status = null;
-
-    public function getStatus(): ?string
+    /**
+     * @return array<ForecastDay>
+     */
+    public function getForecastday(): array
     {
-        return $this->status;
+        return $this->forecastday;
     }
 
-    public function setStatus(?string $status): self
+    /**
+     * @param array<ForecastDay> $forecastday
+     *
+     * @return $this
+     */
+    public function setForecastday(array $forecastday): self
     {
-        $this->status = $status;
-
-        return $this;
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    public function setId(?int $id): self
-    {
-        $this->id = $id;
+        $this->forecastday = $forecastday;
 
         return $this;
     }

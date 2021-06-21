@@ -23,7 +23,7 @@ class FetchWeatherActionTest extends TestCase
     {
         // Arrange
         $cities = $this->provideCities(3);
-        $forecasts = $this->provideForecastsForCities($cities, 3);
+        $forecasts = $this->provideForecastsForCities($cities);
 
         /** @var WeatherLoggerInterface $logger */
         $logger = $this->initializeOutput();

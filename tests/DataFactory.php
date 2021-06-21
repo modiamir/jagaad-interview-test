@@ -4,6 +4,9 @@ namespace Tests;
 
 use App\Model\City;
 use App\Model\Forecast;
+use App\Model\ForecastCondition;
+use App\Model\ForecastDay;
+use App\Model\ForecastDayElement;
 
 trait DataFactory
 {
@@ -14,9 +17,45 @@ trait DataFactory
         return (new City())->setId($this->faker()->randomNumber())->setName($this->faker()->city);
     }
 
-    private function provideForecast(): Forecast
+    private function provideForecastCondition(): ForecastCondition
     {
-        return (new Forecast())->setId($this->faker()->randomNumber())->setStatus($this->faker()->word);
+        return (new ForecastCondition())
+            ->setCode($this->faker()->randomNumber(4))
+            ->setIcon($this->faker()->url)
+            ->setText($this->faker()->word);
+    }
+
+    private function provideForecastDayElement(): ForecastDayElement
+    {
+        return (new ForecastDayElement())->setCondition($this->provideForecastCondition());
+    }
+
+    private function provideForecastDay(): ForecastDay
+    {
+        return (new ForecastDay())
+            ->setDate($this->faker()->date('Y-m-d'))
+            ->setDateEpoch($this->faker()->dateTime->getTimestamp())
+            ->setDay($this->provideForecastDayElement());
+    }
+
+    /**
+     * @return array<ForecastDay>
+     */
+    private function provideForecastDays(int $count = 1): array
+    {
+        /** @var array<ForecastDay> $forecasts */
+        $forecasts = [];
+
+        for ($i = 0; $i < $count; $i++) {
+            $forecasts[] = $this->provideForecastDay();
+        }
+
+        return $forecasts;
+    }
+
+    private function provideForecast(int $forecastDaysCount = 1): Forecast
+    {
+        return (new Forecast())->setForecastday($this->provideForecastDays($forecastDaysCount));
     }
 
     /**
@@ -34,26 +73,11 @@ trait DataFactory
     }
 
     /**
-     * @return array<Forecast>
-     */
-    private function provideForecasts(int $count = 1): array
-    {
-        $forecasts = [];
-
-        for ($i = 0; $i < $count; $i++) {
-            $forecasts[] = $this->provideForecast();
-        }
-
-        return $forecasts;
-    }
-
-    /**
      * @param array<City> $cities
-     * @param int $countPerCity
      *
-     * @return array<int,array<Forecast>>
+     * @return array<int,Forecast>
      */
-    private function provideForecastsForCities(array $cities, int $countPerCity = 1): array
+    private function provideForecastsForCities(array $cities): array
     {
         $forecasts = [];
 
@@ -61,7 +85,7 @@ trait DataFactory
             if (!$city->getId()) {
                 continue;
             }
-            $forecasts[(int)$city->getId()] = $this->provideForecasts($countPerCity);
+            $forecasts[(int)$city->getId()] = $this->provideForecast();
         }
 
         return $forecasts;

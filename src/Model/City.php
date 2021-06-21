@@ -8,6 +8,22 @@ class City
 
     private ?string $name = null;
 
+    private ?float $latitude = null;
+
+    private ?float $longitude = null;
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function setId(?int $id): self
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
     public function getName(): ?string
     {
         return $this->name;
@@ -20,14 +36,29 @@ class City
         return $this;
     }
 
-    public function getId(): ?int
+    /**
+     * @return float|null
+     */
+    public function getLatitude(): ?float
     {
-        return $this->id;
+        return $this->latitude;
     }
 
-    public function setId(?int $id): self
+    public function setLatitude(?float $latitude): self
     {
-        $this->id = $id;
+        $this->latitude = $latitude;
+
+        return $this;
+    }
+
+    public function getLongitude(): ?float
+    {
+        return $this->longitude;
+    }
+
+    public function setLongitude(?float $longitude): self
+    {
+        $this->longitude = $longitude;
 
         return $this;
     }

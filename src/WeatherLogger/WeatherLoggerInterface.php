@@ -9,7 +9,7 @@ interface WeatherLoggerInterface
 {
     /**
      * @param City $city
-     * @param array<Forecast> $forecasts
+     * @param Forecast $forecast
      */
-    public function log(City $city, array $forecasts): void;
+    public function log(City $city, Forecast $forecast): void;
 }

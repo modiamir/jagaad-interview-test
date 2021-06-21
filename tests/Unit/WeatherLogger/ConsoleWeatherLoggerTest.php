@@ -12,23 +12,23 @@ class ConsoleWeatherLoggerTest extends TestCase
 {
     use DataFactory;
 
-    public function test_it_calls_given_output_writeln_method() :void
+    public function test_it_calls_given_output_writeln_method(): void
     {
         // Arrange
         $city = $this->provideCity();
-        $forecasts = $this->provideForecasts(2);
+        $forecast = $this->provideForecast(2);
         /** @var OutputInterface $output */
         $output = $this->initializeOutput();
         $sut = $this->initializeLogger($output);
         $expectedLoggedEntry = sprintf(
             "Processed city %s | %s - %s",
             $city->getName(),
-            $forecasts[0]->getStatus(),
-            $forecasts[1]->getStatus()
+            $forecast->getForecastday()[0]->getDay()->getCondition()->getText(),
+            $forecast->getForecastday()[1]->getDay()->getCondition()->getText()
         );
 
         // Act
-        $sut->log($city, $forecasts);
+        $sut->log($city, $forecast);
 
         // Assert
         /** @var MockInterface $output */

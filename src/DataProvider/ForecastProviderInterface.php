@@ -7,8 +7,5 @@ use App\Model\Forecast;
 
 interface ForecastProviderInterface
 {
-    /**
-     * @return array<Forecast>
-     */
-    public function getForecastsOfCity(City $city): array;
+    public function getForecastsOfCity(City $city): Forecast;
 }

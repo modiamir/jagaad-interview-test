@@ -10,10 +10,13 @@ use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
+use Tests\DataFactory;
 use Tests\TestCase;
 
 class ForecastDenormalizerTest extends TestCase
 {
+    use DataFactory;
+
     /**
      * @test
      * @dataProvider provideDataForSupportMethodTest
@@ -21,7 +24,7 @@ class ForecastDenormalizerTest extends TestCase
     public function it_supports_forecast_model(string $modelType, bool $expectedResult): void
     {
         // Arrange
-        $data = $this->sampleForecastNormalizedData();
+        $data = $this->provideForecastData();
 
         $symfonyDenormalizer = $this->initializeSymfonyNormalizer();
         $sut = $this->initializeForecastDenormalizer($symfonyDenormalizer);
@@ -39,7 +42,7 @@ class ForecastDenormalizerTest extends TestCase
     public function it_denormalizes_data_to_forecast_model(): void
     {
         // Arrange
-        $data = $this->sampleForecastNormalizedData();
+        $data = $this->provideForecastData();
 
         $symfonyDenormalizer = $this->initializeSymfonyNormalizer();
         $sut = $this->initializeForecastDenormalizer($symfonyDenormalizer);
@@ -112,38 +115,5 @@ class ForecastDenormalizerTest extends TestCase
     private function initializeForecastDenormalizer(DenormalizerInterface $denormalizer): ForecastDenormalizer
     {
         return new ForecastDenormalizer($denormalizer);
-    }
-
-    /**
-     * @return array<string,mixed>
-     */
-    private function sampleForecastNormalizedData(): array
-    {
-        return [
-            "forecastday" => [
-                [
-                    "date" => $this->faker()->date('Y-m-d'),
-                    "date_epoch" => $this->faker()->dateTime->getTimestamp(),
-                    "day" => [
-                        "condition" => [
-                            "text" => $this->faker()->word,
-                            "icon" => $this->faker()->url,
-                            "code" => $this->faker()->randomNumber(4),
-                        ]
-                    ]
-                ],
-                [
-                    "date" => $this->faker()->date('Y-m-d'),
-                    "date_epoch" => $this->faker()->dateTime->getTimestamp(),
-                    "day" => [
-                        "condition" => [
-                            "text" => $this->faker()->word,
-                            "icon" => $this->faker()->url,
-                            "code" => $this->faker()->randomNumber(4),
-                        ]
-                    ]
-                ]
-            ]
-        ];
     }
 }

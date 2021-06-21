@@ -12,9 +12,35 @@ trait DataFactory
 {
     use HasFaker;
 
-    private function provideCity(): City
+    /**
+     * @return array<string,mixed>
+     */
+    private function provideCityData(): array
     {
-        return (new City())->setId($this->faker()->randomNumber())->setName($this->faker()->city);
+        return [
+            'id' => $this->faker()->randomNumber(),
+            'name' => $this->faker()->city,
+            'latitude' => $this->faker()->latitude,
+            'longitude' => $this->faker()->longitude,
+        ];
+    }
+
+    /**
+     * @param array<string,string|int|float>|null $cityData
+     *
+     * @return City
+     */
+    private function provideCity(array $cityData = null): City
+    {
+        if (is_null($cityData)) {
+            $cityData = $this->provideCityData();
+        }
+
+        return (new City())
+            ->setId($cityData['id'])
+            ->setName($cityData['name'])
+            ->setLatitude($cityData['latitude'])
+            ->setLongitude($cityData['longitude']);
     }
 
     private function provideForecastCondition(): ForecastCondition
@@ -73,6 +99,20 @@ trait DataFactory
     }
 
     /**
+     * @return array<array<string,float|int|string>>
+     */
+    private function provideCitiesData(int $count = 1): array
+    {
+        $cities = [];
+
+        for ($i = 0; $i < $count; $i++) {
+            $cities[] = $this->provideCityData();
+        }
+
+        return $cities;
+    }
+
+    /**
      * @param array<City> $cities
      *
      * @return array<int,Forecast>
@@ -89,5 +129,38 @@ trait DataFactory
         }
 
         return $forecasts;
+    }
+
+    /**
+     * @return array<string,mixed>
+     */
+    private function provideForecastData(): array
+    {
+        return [
+            "forecastday" => [
+                [
+                    "date" => $this->faker()->date('Y-m-d'),
+                    "date_epoch" => $this->faker()->dateTime->getTimestamp(),
+                    "day" => [
+                        "condition" => [
+                            "text" => $this->faker()->word,
+                            "icon" => $this->faker()->url,
+                            "code" => $this->faker()->randomNumber(4),
+                        ]
+                    ]
+                ],
+                [
+                    "date" => $this->faker()->date('Y-m-d'),
+                    "date_epoch" => $this->faker()->dateTime->getTimestamp(),
+                    "day" => [
+                        "condition" => [
+                            "text" => $this->faker()->word,
+                            "icon" => $this->faker()->url,
+                            "code" => $this->faker()->randomNumber(4),
+                        ]
+                    ]
+                ]
+            ]
+        ];
     }
 }

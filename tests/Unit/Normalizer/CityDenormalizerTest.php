@@ -10,10 +10,13 @@ use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
+use Tests\DataFactory;
 use Tests\TestCase;
 
 class CityDenormalizerTest extends TestCase
 {
+    use DataFactory;
+
     /**
      * @test
      * @dataProvider provideDataForSupportMethodTest
@@ -21,12 +24,7 @@ class CityDenormalizerTest extends TestCase
     public function it_supports_city_model(string $modelType, bool $expectedResult): void
     {
         // Arrange
-        $data = [
-            'id' => $this->faker()->randomNumber(),
-            'name' => $this->faker()->city,
-            'latitude' => $this->faker()->randomFloat(),
-            'longitude' => $this->faker()->randomFloat(),
-        ];
+        $data = $this->provideCityData();
 
         $symfonyDenormalizer = $this->initializeSymfonyDenormalizer();
         $sut = $this->initializeCityDenormalizer($symfonyDenormalizer);
@@ -44,12 +42,7 @@ class CityDenormalizerTest extends TestCase
     public function it_denormalizes_data_to_city_model(): void
     {
         // Arrange
-        $data = [
-            'id' => $this->faker()->randomNumber(),
-            'name' => $this->faker()->city,
-            'latitude' => $this->faker()->randomFloat(),
-            'longitude' => $this->faker()->randomFloat(),
-        ];
+        $data = $this->provideCityData();
 
         $symfonyDenormalizer = $this->initializeSymfonyDenormalizer();
         $sut = $this->initializeCityDenormalizer($symfonyDenormalizer);

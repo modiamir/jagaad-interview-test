@@ -4,6 +4,7 @@ namespace Tests\Unit\Normalizer;
 
 use App\Normalizer\Denormalizer;
 use App\Normalizer\ModelDenormalizerInterface;
+use InvalidArgumentException;
 use Mockery\Expectation;
 use Mockery\MockInterface;
 use Tests\TestCase;
@@ -70,6 +71,28 @@ class ObjectNormalizerTest extends TestCase
             ->shouldHaveReceived('denormalize')
             ->with($data, SampleModelClass::class)
             ->once();
+    }
+
+    /**
+     * @test
+     */
+    public function it_thwors_exception_when_there_is_no_supportive_denormalizer(): void
+    {
+        $data = [
+            'key_one' => $this->faker()->word,
+            'key_two' => $this->faker()->randomNumber(),
+        ];
+        $denormalizedData = new SampleModelClass();
+        $denormalizedData->keyOne = $data['key_one'];
+        $denormalizedData->setKeyTwo($data['key_two']);
+        $sut = $this->initializeDenormalizer([]);
+
+        // Expect
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('There is no supportive denormalizer for given type');
+
+        // Act
+        $sut->denormalize($data, SampleModelClass::class);
     }
 
     private function initializeModelDenormalizer(): MockInterface

@@ -23,7 +23,7 @@ class ForecastProvider implements ForecastProviderInterface
         $forecastData = $this->apiClient->fetchForecastForCity($city);
 
         /** @var Forecast $forecast */
-        $forecast = $this->denormalizer->denormalize($forecastData, Forecast::class);
+        $forecast = $this->denormalizer->denormalize($forecastData['forecast'], Forecast::class);
 
         return $forecast;
     }

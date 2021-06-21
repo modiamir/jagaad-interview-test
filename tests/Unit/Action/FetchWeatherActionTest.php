@@ -31,7 +31,7 @@ class FetchWeatherActionTest extends TestCase
         $cityProvider = $this->initializeCityProvider();
         /** @var ForecastProviderInterface $forecastProvider */
         $forecastProvider = $this->initializeForecastProvider();
-        $sut = $this->initializeFetchWeatherAction($cityProvider, $forecastProvider, $logger);
+        $sut = $this->initializeFetchWeatherAction($cityProvider, $forecastProvider);
 
         /** @var MockInterface $cityProvider */
         /** @var Expectation $expectation */
@@ -72,9 +72,8 @@ class FetchWeatherActionTest extends TestCase
 
     private function initializeFetchWeatherAction(
         CityProviderInterface $cityProvider,
-        ForecastProviderInterface $forecastProvider,
-        WeatherLoggerInterface $weatherLogger
+        ForecastProviderInterface $forecastProvider
     ): FetchWeatherAction {
-        return new FetchWeatherAction($cityProvider, $forecastProvider, $weatherLogger);
+        return new FetchWeatherAction($cityProvider, $forecastProvider);
     }
 }

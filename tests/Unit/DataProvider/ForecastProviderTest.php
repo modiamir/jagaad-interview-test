@@ -33,7 +33,7 @@ class ForecastProviderTest extends TestCase
         /** @var MockInterface $forecastApi */
         /** @var Expectation $expectation */
         $expectation = $forecastApi->shouldReceive('fetchForecastForCity');
-        $expectation->with($city)->andReturn($forecastData);
+        $expectation->with($city)->andReturn(['forecast' => $forecastData]);
 
         /** @var MockInterface $denormalizer */
         /** @var Expectation $expectation */

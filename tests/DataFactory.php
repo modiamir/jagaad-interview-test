@@ -99,7 +99,7 @@ trait DataFactory
     }
 
     /**
-     * @return array<array<string,float|int|string>>
+     * @return array<array<string,mixed>>
      */
     private function provideCitiesData(int $count = 1): array
     {
